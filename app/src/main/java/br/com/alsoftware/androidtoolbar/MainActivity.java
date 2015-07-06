@@ -4,6 +4,8 @@ package br.com.alsoftware.androidtoolbar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbarPrincipal;
     private Toolbar mToolbarRodape;
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
                 startConfigActivity();
             }
         });
+        mFragment = (CarroFragment)getSupportFragmentManager().findFragmentByTag("tag_carroFragment");
+        if (mFragment == null){
+            mFragment = new CarroFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, mFragment, "tag_carroFragment");
+            ft.commit();
+        }
     }
 
     @Override

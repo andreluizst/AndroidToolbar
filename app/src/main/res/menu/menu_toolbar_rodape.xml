@@ -3,10 +3,16 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:context=".MainActivity">
 
-    <item android:id="@+id/mn_cofig"
-        android:title="Configurações"
+    <item android:id="@+id/mn_facebook"
+        android:title="Facebook"
         android:orderInCategory="100"
-        android:icon="@android:drawable/btn_star"
+        android:icon="@drawable/facebook"
+        app:showAsAction="withText|ifRoom" />
+
+    <item android:id="@+id/mn_linkedin"
+        android:title="Linkedin"
+        android:orderInCategory="100"
+        android:icon="@drawable/linkedin"
         app:showAsAction="withText|ifRoom" />
 
 </menu>

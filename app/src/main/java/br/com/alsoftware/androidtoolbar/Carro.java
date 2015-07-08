@@ -13,6 +13,12 @@ public class Carro {
 
     }
 
+    public Carro(String nome, String marca, int foto){
+        this.nome = nome;
+        this.marca = marca;
+        this.foto = foto;
+    }
+
 
     public String getNome() {
         return nome;

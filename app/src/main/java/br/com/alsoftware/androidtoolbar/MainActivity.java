@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbarPrincipal;
@@ -58,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 startConfigActivity();
             }
         });
-        mFragment = (CarroFragment)getSupportFragmentManager().findFragmentByTag("tag_carroFragment");
+        mFragment = (CarroFragmentList)getSupportFragmentManager().findFragmentByTag("tag_carroFragment");
         if (mFragment == null){
-            mFragment = new CarroFragment();
+            mFragment = new CarroFragmentList();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment_container, mFragment, "tag_carroFragment");
             ft.commit();
@@ -94,5 +97,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(it);
     }
 
+    public List<Carro> getListaDeCarrosCom(int qtd){
+        String[] models = new String[]{"Gallardo", "Vyron", "Corvette", "Pagani Zonda", "Porsche 911 Carrera", "BMW 720i", "DB77", "Mustang", "Camaro", "CT6"};
+        String[] brands = new String[]{"Lamborghini", " bugatti", "Chevrolet", "Pagani", "Porsche", "BMW", "Aston Martin", "Ford", "Chevrolet", "Cadillac"};
+        int[] photos = new int[]{R.drawable.gallardo, R.drawable.vyron, R.drawable.corvette, R.drawable.paganni_zonda, R.drawable.porsche_911, R.drawable.bmw_720, R.drawable.db77, R.drawable.mustang, R.drawable.camaro, R.drawable.ct6};
+        List<Carro> listAux = new ArrayList<>();
+
+        for(int i = 0; i < qtd; i++){
+            Carro c = new Carro( models[i % models.length], brands[ i % brands.length ], photos[i % models.length] );
+            listAux.add(c);
+        }
+        return(listAux);
+    }
 
 }

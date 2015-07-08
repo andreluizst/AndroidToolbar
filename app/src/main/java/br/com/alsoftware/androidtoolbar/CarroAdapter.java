@@ -25,12 +25,16 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return null;
+        View v = mLayoutInflater.inflate(R.layout.item_lista_carro, viewGroup, false);
+        ViewHolder viewHolder = new ViewHolder(v);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-
+        viewHolder.txtvNome.setText(mLista.get(i).getNome());
+        viewHolder.txtvMarca.setText(mLista.get(i).getMarca());
+        viewHolder.imgFoto.setImageResource(mLista.get(i).getFoto());
     }
 
     @Override
@@ -42,6 +46,14 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
         mLista = lista;
     }
 
+    public void adicionarItem(Carro carro, int posicao){
+        if (posicao == mLista.size())
+            mLista.add(carro);
+        else
+            mLista.add(posicao, carro);
+        notifyItemInserted(posicao);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txtvNome;
         public TextView txtvMarca;
@@ -51,7 +63,9 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
         public ViewHolder(View view){
             super(view);
 
-            //txtvNome = (TextView)view.findViewById(//id do textView na view item_carro_lista)
+            txtvNome = (TextView)view.findViewById(R.id.txtvNome);
+            txtvMarca = (TextView)view.findViewById(R.id.txtvMarca);
+            imgFoto = (ImageView)view.findViewById(R.id.imgFotoCarro);
         }
     }
 }

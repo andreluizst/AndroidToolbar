@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingLeft="16dp"
+    android:background="@color/gray_light">
+
+    <ImageView
+        android:id="@+id/imgFotoCarro"
+        android:layout_alignParentLeft="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="6dp"
+        android:src="@null"/>
+
+    <TextView
+        android:id="@+id/txtvNome"
+        android:textSize="16sp"
+        android:layout_toRightOf="@+id/imgFotoCarro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="16dp"
+        android:layout_marginBottom="5dp"
+        android:text="@null"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/txtvMarca"
+        android:textSize="12sp"
+        android:layout_toRightOf="@+id/imgFotoCarro"
+        android:layout_below="@+id/txtvNome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="16dp"
+        android:text="@null"
+        android:textColor="@color/black"/>
+
+    <View
+        android:id="@+id/divisorItem"
+        android:layout_marginTop="20dp"
+        android:layout_alignLeft="@+id/txtvNome"
+        android:layout_below="@+id/txtvMarca"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/corPrimaria"/>
+
+
+</RelativeLayout>

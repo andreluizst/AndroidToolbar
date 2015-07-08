@@ -4,14 +4,14 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
 
         <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimary">@color/corPrimaria</item>
 
         <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/blue_deep</item>
+        <item name="colorPrimaryDark">@color/corPrimariaEscura</item>
 
         <!-- colorAccent is used as the default value for colorControlActivated,
              which is used to tint widgets -->
-        <item name="colorAccent">@color/yellow</item>
+        <item name="colorAccent">@color/corDestaque</item>
 
 
 

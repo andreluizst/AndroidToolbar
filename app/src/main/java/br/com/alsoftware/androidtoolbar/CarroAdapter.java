@@ -8,7 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.Inflater;
 
 /**
@@ -17,6 +22,8 @@ import java.util.zip.Inflater;
 public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder>  {
     private List<Carro> mLista;
     private LayoutInflater mLayoutInflater;
+    private RecyclerViewOnClickListener mRecyclerViewOnClickListener;
+
 
     public CarroAdapter(Context context, List<Carro> lista){
         mLista = lista;
@@ -35,6 +42,13 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
         viewHolder.txtvNome.setText(mLista.get(i).getNome());
         viewHolder.txtvMarca.setText(mLista.get(i).getMarca());
         viewHolder.imgFoto.setImageResource(mLista.get(i).getFoto());
+
+        try{
+            YoYo.with(Techniques.Tada).duration(700).playOn(viewHolder.itemView);
+        }catch(Exception e){
+            Logger.getLogger(CarroAdapter.class.getName()).log(Level.SEVERE, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -54,7 +68,11 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
         notifyItemInserted(posicao);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void setRecyclerViewOnClickListener(RecyclerViewOnClickListener recyclerViewOnClickListener){
+        this.mRecyclerViewOnClickListener = recyclerViewOnClickListener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView txtvNome;
         public TextView txtvMarca;
         public ImageView imgFoto;
@@ -66,6 +84,14 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
             txtvNome = (TextView)view.findViewById(R.id.txtvNome);
             txtvMarca = (TextView)view.findViewById(R.id.txtvMarca);
             imgFoto = (ImageView)view.findViewById(R.id.imgFotoCarro);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mRecyclerViewOnClickListener != null){
+                mRecyclerViewOnClickListener.onClick(v, getAdapterPosition());
+            }
         }
     }
 }

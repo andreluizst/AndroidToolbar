@@ -6,12 +6,31 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
+import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.ToggleDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbarPrincipal;
     private Toolbar mToolbarRodape;
     private Fragment mFragment;
+    private Drawer mDrawerLeft;
+    private Drawer mDrawerRight;
+    private AccountHeader mDrawerHeader;
+    private int mDrawerItemClickedIndex;
+    private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
+            Toast.makeText(MainActivity.this, "onCheckedChanged=" + (b?"true":"false"), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +97,123 @@ public class MainActivity extends AppCompatActivity {
             ft.replace(R.id.fragment_container, mFragment, "tag_carroFragment");
             ft.commit();
         }
+
+        /*//Drawer da direita
+        mDrawerRight = new DrawerBuilder()
+                .withActivity(this)
+                .withSavedInstance(savedInstanceState)
+                //.withToolbar(mToolbarPrincipal) //Desativar para não dar problema no ícone Hanburger para o DrawerLeft
+                .withDrawerGravity(Gravity.END)
+                .withDisplayBelowToolbar(true) // Comportamento padrão =  belowToolbar(false)
+                .withSelectedItem(-1) // nenhum item selecionado
+                .withActionBarDrawerToggleAnimated(true)
+                .addDrawerItems(new SecondaryDrawerItem().withName("Carros esportivos")
+                                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_1)),
+                        new SecondaryDrawerItem().withName("Carros de luxo")
+                                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_2)),
+                        new SecondaryDrawerItem().withName("Carros de colecionardor")
+                                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_3)),
+                        new SecondaryDrawerItem().withName("Carros populares")
+                                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_4))
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                        Toast.makeText(MainActivity.this, "Drawer onItemClick on position " + i, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                })
+                .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                        Toast.makeText(MainActivity.this, "Drawer onItemLongClick on position " + i, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                })
+                .build();*/
+
+        mDrawerHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withCompactStyle(false)
+                .withHeaderBackground(R.drawable.ct6)
+                .withSavedInstance(savedInstanceState)
+                .withThreeSmallProfileImages(false)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("Perfil 01").withEmail("pessoa01@gmail.com")
+                                .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_1)),
+                        new ProfileDrawerItem().withName("Perfil 02").withEmail("pessoa02@hotmail.com")
+                                .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_2)),
+                        new ProfileDrawerItem().withName("Perfil 03").withEmail("pessoa03@yahoo.com")
+                                .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_3)),
+                        new ProfileDrawerItem().withName("Perfil 04").withEmail("pessoa04@live.com")
+                                .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_4))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                        Toast.makeText(MainActivity.this, "onProfileChanged", Toast.LENGTH_SHORT).show();
+                        mDrawerHeader.setBackgroundRes(R.drawable.mustang);
+                        return false;
+                    }
+                })
+                .build();
+
+        // Drawer da esquerda
+        mDrawerLeft = new DrawerBuilder().withActivity(this)
+                .withSavedInstance(savedInstanceState)
+                .withToolbar(mToolbarPrincipal)
+                .withTranslucentStatusBar(false)
+                //.withStatusBarColorRes(R.color.blue_deep)
+                .withDrawerGravity(Gravity.LEFT)
+                .withAccountHeader(mDrawerHeader)
+                .withDisplayBelowToolbar(false)
+                .withSelectedItem(0)
+                .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener(){
+                    @Override
+                    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                        Toast.makeText(MainActivity.this, "Drawer onItemClick on position " + i, Toast.LENGTH_SHORT).show();
+                        for (int count = 0; count < mDrawerLeft.getDrawerItems().size();count++){
+                            if (mDrawerItemClickedIndex == count && mDrawerItemClickedIndex <= 3){
+                                PrimaryDrawerItem pdi = (PrimaryDrawerItem)mDrawerLeft.getDrawerItems().get(count);
+                                pdi.setIcon(ContextCompat.getDrawable(MainActivity.this, getCarroDrawerItem(count, false)));
+                                break;
+                            }
+                        }
+                        if (i <= 3){
+                            ((PrimaryDrawerItem)iDrawerItem).setIcon(ContextCompat
+                                    .getDrawable(MainActivity.this, getCarroDrawerItem(i, true)));
+                        }
+                        mDrawerItemClickedIndex = i;
+                        mDrawerLeft.getAdapter().notifyDataSetChanged();
+                        return false;
+                    }
+                })
+                .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                        Toast.makeText(MainActivity.this, "Drawer onItemLongClick on position " + i, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                })
+                .build();
+        mDrawerLeft.addItem(new PrimaryDrawerItem().withName("Carros esportivos")
+                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_1)));
+        mDrawerLeft.addItem(new PrimaryDrawerItem().withName("Carros de luxo")
+                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_2)));
+        mDrawerLeft.addItem(new PrimaryDrawerItem().withName("Carros de colecionardor")
+                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_3)));
+        mDrawerLeft.addItem(new PrimaryDrawerItem().withName("Carros populares")
+                .withIcon(ContextCompat.getDrawable(this, R.drawable.car_4)));
+        mDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
+        mDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificações")
+                .withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener));
+        mDrawerLeft.addItem(new ToggleDrawerItem().withName("Notícias")
+                .withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener));
+
+        /*getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);*/
     }
 
     @Override
@@ -110,4 +256,29 @@ public class MainActivity extends AppCompatActivity {
         return(listAux);
     }
 
+    public int getCarroDrawerItem(int posicao, boolean selecionado){
+      switch (posicao){
+          case 0:
+              return selecionado ? R.drawable.car_selected_1 : R.drawable.car_1;
+          case 1:
+              return selecionado ? R.drawable.car_selected_2 : R.drawable.car_2;
+          case 2:
+              return selecionado ? R.drawable.car_selected_3 : R.drawable.car_3;
+          case 3:
+              return selecionado ? R.drawable.car_selected_4 : R.drawable.car_4;
+      }
+        return -1;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLeft.isDrawerOpen() || (mDrawerRight != null && mDrawerRight.isDrawerOpen())){
+            if (mDrawerLeft.isDrawerOpen())
+                mDrawerLeft.closeDrawer();
+            if (mDrawerRight != null && mDrawerRight.isDrawerOpen())
+                mDrawerRight.closeDrawer();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }

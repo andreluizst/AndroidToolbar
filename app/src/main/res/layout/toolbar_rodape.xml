@@ -7,11 +7,10 @@
     android:layout_height="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/white"
+    android:background="@color/gray_light"
     android:layout_marginLeft="6dp"
     android:layout_marginRight="6dp"
-    android:layout_marginBottom="6dp"
-    app:theme="@style/ThemeOverlay.AppCompat.Light">
+    android:layout_marginBottom="6dp">
 
     <ImageView
         android:id="@+id/img_config"

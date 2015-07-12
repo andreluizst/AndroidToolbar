@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "br.com.alsoftware.androidtoolbar"
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -31,4 +31,9 @@ dependencies {
     compile('com.mikepenz:materialdrawer:3.1.2@aar') {
         transitive = true
     }
+    //*** BIBLIOTECA PARA ARREDONDAR OS CANTOS DAS IMAGENS ****
+    compile 'com.joooonho:selectableroundedimageview:1.0.1'
+    //*** Floatintg Button Libraries
+    compile 'com.github.shell-software:fab:1.1.2'
+    compile 'com.github.clans:fab:1.5.4'
 }

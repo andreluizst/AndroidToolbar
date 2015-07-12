@@ -20,6 +20,9 @@
             android:name=".ConfigActivity"
             android:label="Configuraçoes">
         </activity>
+        <activity android:name=".CarroActivity" android:label="Carros Esportivos">
+
+        </activity>
     </application>
 
 </manifest>

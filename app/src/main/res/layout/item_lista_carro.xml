@@ -41,7 +41,7 @@
         android:layout_alignLeft="@+id/txtvNome"
         android:layout_below="@+id/txtvMarca"
         android:layout_width="match_parent"
-        android:layout_height="0.8dp"
+        android:layout_height="1dp"
         android:background="@color/corPrimaria"/>
 
 

@@ -34,6 +34,7 @@
 
         <item name="android:windowBackground">@color/white</item>
 
+
     </style>
 
     <style name="AppTheme.Toolbar.Footer" parent="AppTheme">
@@ -42,7 +43,7 @@
     </style>
 
     <style name="AppTheme.PopupMenu" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:colorBackground">@color/blue</item>
+        <item name="android:colorBackground">@color/corPrimaria</item>
         <item name="android:textColor">@color/white</item>
     </style>
 

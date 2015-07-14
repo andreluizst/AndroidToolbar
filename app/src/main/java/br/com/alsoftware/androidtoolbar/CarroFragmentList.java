@@ -18,6 +18,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.software.shell.fab.ActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
     private int mLayoutList;
     private ActionButton mFlatActionButtonCard = null;
     private FloatingActionMenu mFloatActionButtonMain = null;
+    private int mCategoria;
 
 
 
@@ -45,9 +47,20 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
 
         Log.i("CarroFragmentList", "buildWithLayout...");
 
+        return buildWithParams(layoutList, null, -1);
+    }
+
+    public static CarroFragmentList buildWithParams(int layoutList, List<Carro> lista, int categoria){
+
+        Log.w("CarroFragmentList", "buildWithParams...");
+
         CarroFragmentList fragment = new CarroFragmentList();
         Bundle bundle = new Bundle();
         bundle.putInt(LAYOUT_LIST_EXTRA, layoutList);
+        if (categoria >= 0)
+            bundle.putInt("categoria", categoria);
+        if (lista != null)
+            bundle.putParcelableArrayList(CarroActivity.LISTA_CARROS_ESPORTIVOS_EXTRA, (ArrayList<Carro>)lista);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -88,7 +101,7 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
                 CarroAdapter adapter = (CarroAdapter)recyclerView.getAdapter();
                 if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == mLista.size()-1){
-                    List<Carro> listaAux = MainActivity.getListaDeCarrosCom(10);
+                    List<Carro> listaAux = MainActivity.getListaDeCarrosCom(10, mCategoria);
                     for (int i=0;i<listaAux.size();i++){
                         adapter.adicionarItem(listaAux.get(i), mLista.size());
                     }
@@ -96,15 +109,22 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
             }
         });
 
-        mLista = MainActivity.getListaDeCarrosCom(10);
+
         if (getArguments() != null) {
+            mCategoria = getArguments().getInt("categoria", 0);
+            mLista = getArguments().getParcelableArrayList(CarroActivity.LISTA_CARROS_ESPORTIVOS_EXTRA);
             mLayoutList = getArguments().getInt(LAYOUT_LIST_EXTRA, DEFAULT_LIST);
             Log.i("CarroFragmentList", "getArguments() != null...");
         }else {
-            if (savedInstanceState != null)
+            if (savedInstanceState != null) {
                 mLayoutList = savedInstanceState.getInt(LAYOUT_LIST_EXTRA);
-            else
+                mLista = savedInstanceState.getParcelableArrayList(CarroActivity.LISTA_CARROS_ESPORTIVOS_EXTRA);
+                mCategoria = savedInstanceState.getInt("categoria");
+            }
+            else {
                 mLayoutList = DEFAULT_LIST;
+                mLista = MainActivity.getListaDeCarrosCom(10, 0);
+            }
         }
         CarroAdapter adapter = new CarroAdapter(getActivity(), mLista, mLayoutList);
 
@@ -123,6 +143,7 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void onClick(View view, int position) {
+        Log.w("RecyclerView", "onCLick...");
         Toast.makeText(getActivity(), "onClick na posição " + position, Toast.LENGTH_SHORT).show();
     }
 
@@ -171,6 +192,13 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
                     if (viewFilha != null && mRecyclerViewOnClickListener != null){
                         mRecyclerViewOnClickListener.onClick(viewFilha, recyclerView.getChildAdapterPosition(viewFilha));
                     }
+                    if (viewFilha != null && !(viewFilha instanceof FloatingActionMenu || viewFilha instanceof FloatingActionMenu)){
+                        if (mFloatActionButtonMain != null && mFloatActionButtonMain.isOpened()) {
+                            mFloatActionButtonMain.close(true);
+                            return true;
+                        }
+                    }
+                    Log.w("RecyclerView", "onSingleTapUp...");
                     return false;
                 }
 
@@ -207,6 +235,8 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(LAYOUT_LIST_EXTRA, mLayoutList);
+        outState.putInt("categoria", mCategoria);
+        outState.putParcelableArrayList(CarroActivity.LISTA_CARROS_ESPORTIVOS_EXTRA, (ArrayList<Carro>)mLista);
     }
 
     private void configActionButton(){
@@ -228,7 +258,7 @@ public class CarroFragmentList extends Fragment implements RecyclerViewOnClickLi
             mFlatActionButtonCard.setOnClickListener(this);
         }else{
             mFloatActionButtonMain = (FloatingActionMenu)getActivity().findViewById(R.id.fab);
-            mFloatActionButtonMain.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener(){
+            mFloatActionButtonMain.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
                 @Override
                 public void onMenuToggle(boolean b) {
                     Toast.makeText(getActivity(), "FloatingActionMenu.onMenuToggle", Toast.LENGTH_SHORT).show();

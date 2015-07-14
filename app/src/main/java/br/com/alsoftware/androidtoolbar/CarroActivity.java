@@ -14,13 +14,19 @@ import android.widget.Toast;
 
 import com.software.shell.fab.ActionButton;
 
+import java.util.List;
+
 /**
  * Created by AndreLuiz on 05/07/2015.
  */
 public class CarroActivity extends AppCompatActivity {
+    public static final String LISTA_CARROS_ESPORTIVOS_EXTRA = "LISTA_CARROS_ESPORTIVOS_EXTRA";
+
     private Toolbar mToolbarPrincipal;
     private Toolbar mToolbarRodape;
     private Fragment mFragment;
+    private List<Carro> mCarros;
+    private int mCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +40,18 @@ public class CarroActivity extends AppCompatActivity {
         setSupportActionBar(mToolbarPrincipal);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (savedInstanceState == null){
+            mCarros = getIntent().getParcelableArrayListExtra(LISTA_CARROS_ESPORTIVOS_EXTRA);
+            mCategoria = getIntent().getIntExtra("categoria", 0);
+        }
+
         //configToolbarRodape();//Não está mais sendo usado nessa versão
 
         mFragment = (CarroFragmentList)getSupportFragmentManager().findFragmentByTag("tag_carroListCardFragment");
         if (mFragment == null){
-            mFragment = CarroFragmentList.buildWithLayout(CarroFragmentList.CARD_LIST);
+            //mFragment = CarroFragmentList.buildWithLayout(CarroFragmentList.CARD_LIST);
+            mFragment = CarroFragmentList.buildWithParams(CarroFragmentList.CARD_LIST,
+                    mCarros, mCategoria);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment_container, mFragment, "tag_carroListCardFragment");
             ft.commit();

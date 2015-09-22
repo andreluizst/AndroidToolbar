@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,14 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.software.shell.fab.ActionButton;
-
 import java.util.List;
+
+import br.com.alsoftware.androidtoolbar.adapters.PagerAdapterCarros;
+import br.com.alsoftware.androidtoolbar.util.SlidingTabLayout;
 
 /**
  * Created by AndreLuiz on 05/07/2015.
  */
-public class CarroActivity extends AppCompatActivity {
+public class TabCarroActivity extends AppCompatActivity {
     public static final String LISTA_CARROS_ESPORTIVOS_EXTRA = "LISTA_CARROS_ESPORTIVOS_EXTRA";
 
     private Toolbar mToolbarPrincipal;
@@ -29,21 +32,55 @@ public class CarroActivity extends AppCompatActivity {
     private List<Carro> mCarros;
     private int mCategoria;
     private Snackbar mSnackBar;
+    private SlidingTabLayout mSlidingTabLayout;
+    private ViewPager mViewPager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carro);
+        setContentView(R.layout.activity_tab_carros);
 
-        Log.i("CarroActivity", "onCreate...");
+        Log.i("--> TabCarroActivity", "onCreate...");
 
         mToolbarPrincipal = (Toolbar)findViewById(R.id.tb_principal);
-        mToolbarPrincipal.setTitle("Carros Esportivos");
+        mToolbarPrincipal.setTitle("Carros em Tabs e ViewPagers");
         setSupportActionBar(mToolbarPrincipal);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState == null){
+        mSlidingTabLayout = (SlidingTabLayout)findViewById(R.id.stlTabs);
+        /*
+        Ao usar TABs personalizadas deve-se configurar BackgourndColor e SelectedIndicatorColors
+        via código para evitar bugs na view.
+         */
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_custom_view, R.id.txtvTabTitulo);
+        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.corPrimaria));
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.corDestaque));
+        //DistributeEvenly faz com que todas as TABs tenham a mesma largura
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mViewPager = (ViewPager)findViewById(R.id.viewPager);
+        mViewPager.setAdapter(new PagerAdapterCarros(getSupportFragmentManager(), this));
+
+        /*mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
+        mSlidingTabLayout.setViewPager(mViewPager);
+
+
+        /*if (savedInstanceState == null){
             mCarros = getIntent().getParcelableArrayListExtra(LISTA_CARROS_ESPORTIVOS_EXTRA);
             mCategoria = getIntent().getIntExtra("categoria", 0);
         }
@@ -58,7 +95,7 @@ public class CarroActivity extends AppCompatActivity {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment_container, mFragment, "tag_carroListCardFragment");
             ft.commit();
-        }
+        }*/
 
     }
 
@@ -70,7 +107,7 @@ public class CarroActivity extends AppCompatActivity {
         return true;
     }
 
-    private void configToolbarRodape(){
+    /*private void configToolbarRodape(){
         mToolbarRodape = (Toolbar)findViewById(R.id.tb_Included_Rodape);
         mToolbarRodape.inflateMenu(R.menu.menu_toolbar_rodape);//Não está sendo usado mais nessa versão.
         mToolbarRodape.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -95,8 +132,8 @@ public class CarroActivity extends AppCompatActivity {
         mToolbarRodape.findViewById(R.id.img_config).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CarroActivity.this, "Menu de configuraçoes acionado!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TabCarroActivity.this, "Menu de configuraçoes acionado!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 }

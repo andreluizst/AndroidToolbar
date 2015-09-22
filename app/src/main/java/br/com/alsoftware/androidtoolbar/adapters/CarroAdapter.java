@@ -1,14 +1,14 @@
-package br.com.alsoftware.androidtoolbar;
+package br.com.alsoftware.androidtoolbar.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,8 +18,11 @@ import com.daimajia.androidanimations.library.YoYo;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.Inflater;
 
+import br.com.alsoftware.androidtoolbar.Carro;
+import br.com.alsoftware.androidtoolbar.CarroFragmentList;
+import br.com.alsoftware.androidtoolbar.R;
+import br.com.alsoftware.androidtoolbar.RecyclerViewOnClickListener;
 import br.com.alsoftware.androidtoolbar.util.ImageHelper;
 
 /**
@@ -34,7 +37,7 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
     private float mDensidadeDaTela;
     private int mLargura;
     private int mAltura;
-
+    //cometário
 
     public CarroAdapter(Context context, List<Carro> lista){
         this(context, lista, -1);
@@ -120,7 +123,7 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
         this.mRecyclerViewOnClickListener = recyclerViewOnClickListener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txtvNome;
         public TextView txtvMarca;
         public ImageView imgFoto;
@@ -128,18 +131,25 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.ViewHolder> 
 
         public ViewHolder(View view){
             super(view);
-
+            Button btn;
             txtvNome = (TextView)view.findViewById(R.id.txtvNome);
             txtvMarca = (TextView)view.findViewById(R.id.txtvMarca);
             imgFoto = (ImageView)view.findViewById(R.id.imgFotoCarro);
             view.setOnClickListener(this);
+            btn = (Button)view.findViewById(R.id.btnFone);
+            if (btn != null)
+                btn.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
+            if (v.getId() == R.id.btnFone)
+                Log.w("CarroAdapter", "onClick no botão de telefone...");
             if (mRecyclerViewOnClickListener != null){
-                mRecyclerViewOnClickListener.onClick(v, getAdapterPosition());
-            }
+                Log.w("CarroAdapter", "mRecyclerViewOnClickListener...");
+                mRecyclerViewOnClickListener.onClickRecyclerView(v, getAdapterPosition());
+            }else
+                Log.w("CarroAdapter", "mRecyclerViewOnClickListener está NULO...");
         }
     }
 

@@ -202,9 +202,11 @@ public class MainActivity extends AppCompatActivity {
 
     // CATEGORIES
     private List<PrimaryDrawerItem> getSetCategoryList(){
-        String[] names = new String[]{"Todos os Carros", "Carros de Luxo", "Carros Esportivos", "Carros para Colecionadores", "Carros Populares"};
-        int[] icons = new int[]{R.drawable.car_1, R.drawable.car_1, R.drawable.car_2, R.drawable.car_3, R.drawable.car_4};
-        int[] iconsSelected = new int[]{R.drawable.car_selected_1, R.drawable.car_selected_1, R.drawable.car_selected_2, R.drawable.car_selected_3, R.drawable.car_selected_4};
+        String[] names = new String[]{"Todos os Carros", "Carros de Luxo", "Carros Esportivos", "Carros para Colecionadores", "Tabs e CardViews"};
+        int[] icons = new int[]{R.drawable.car_1, R.drawable.car_1,
+                R.drawable.car_2, R.drawable.car_3, R.drawable.car_4};
+        int[] iconsSelected = new int[]{R.drawable.car_selected_1, R.drawable.car_selected_1,
+                R.drawable.car_selected_2, R.drawable.car_selected_3, R.drawable.car_selected_4};
         List<PrimaryDrawerItem> list = new ArrayList<>();
 
         for(int i = 0; i < names.length; i++){
@@ -327,13 +329,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private AccountHeader getDrawerHeader(Bundle savedInstanceState){
-        return new AccountHeaderBuilder()
+        AccountHeader ah = null;
+        ah = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(false)
                 .withHeaderBackground(R.drawable.ct6)
                 .withSavedInstance(savedInstanceState)
-                .withThreeSmallProfileImages(false)
-                .addProfiles(
+                .withThreeSmallProfileImages(true)
+                /*.addProfiles(
                         new ProfileDrawerItem().withName("Perfil 01").withEmail("pessoa01@gmail.com")
                                 .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_1)),
                         new ProfileDrawerItem().withName("Perfil 02").withEmail("pessoa02@hotmail.com")
@@ -342,16 +345,31 @@ public class MainActivity extends AppCompatActivity {
                                 .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_3)),
                         new ProfileDrawerItem().withName("Perfil 04").withEmail("pessoa04@live.com")
                                 .withIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.person_4))
-                )
+                )*/
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                        final boolean FECHAR_DRAWER = false;
+                        final boolean DEIXAR_DRAWER_ABERTO = true;
+
                         Toast.makeText(MainActivity.this, "onProfileChanged", Toast.LENGTH_SHORT).show();
-                        mDrawerHeader.setBackgroundRes(R.drawable.mustang);
-                        return false;
+                        Pessoa pessoa = getPersonByEmail(getSetProfileList(), (ProfileDrawerItem)iProfile);
+                        if (pessoa != null)
+                            mDrawerHeader.setBackgroundRes(pessoa.getBackground());
+
+                        return DEIXAR_DRAWER_ABERTO;
                     }
                 })
                 .build();
+        List<Pessoa> lista = getSetProfileList();
+        if (lista != null && lista.size() > 0){
+            for (int i = 0; i < lista.size();i++) {
+                ah.addProfile(lista.get(i).getProfile(), i);
+            }
+            ah.setBackgroundRes(lista.get(0).getBackground());
+        }
+
+        return ah;
     }
 
     private Drawer getDrawerMainActivity(Bundle savedInstanceState){
@@ -408,6 +426,10 @@ public class MainActivity extends AppCompatActivity {
                                 it.putParcelableArrayListExtra(CarroActivity.LISTA_CARROS_ESPORTIVOS_EXTRA,
                                         (ArrayList<Carro>) getListaDeCarrosCom(10, 2));
 
+                                startActivity(it);
+                                break;
+                            case 4:
+                                it = new Intent(MainActivity.this, TabCarroActivity.class);
                                 startActivity(it);
                                 break;
                         }
